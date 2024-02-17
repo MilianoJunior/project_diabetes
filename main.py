@@ -39,6 +39,8 @@ Estrutura do projeto:
 from libs import api, interface, login
 import dotenv
 import os
+import multiprocessing
+import time
 
 # Carregando as variáveis de ambiente
 dotenv.load_dotenv()
@@ -46,7 +48,38 @@ dotenv.load_dotenv()
 
 
 # Inicializando a aplicação
+def api_app():
+    # api.app.run(debug=True, port=8080, host='
+    print('API Inicializada')
+    cont = 0
+    while True:
+        print(cont, 'API Rodando')
+        time.sleep(1)
+        cont += 1
+        if cont > 10:
+            break
+    return True
+
+def interface_app():
+
+    print('Interface Inicializada')
+    cont = 0
+    while True:
+        print(cont, 'Interface Rodando')
+        time.sleep(1)
+        cont += 1
+        if cont > 10:
+            break
+    return True
 
 if __name__ == '__main__':
-    # Inicializando a aplicação
-    interface.app.run_server(debug=True, port=8080, host='0.0.0.0')
+
+    # Ultilizar o multiprocessing para inicializar a API e a interface do usuário
+    # Inicializando a API
+    api_process = multiprocessing.Process(target=api_app)
+    api_process.start()
+
+    # Inicializando a interface do usuário
+    interface_process = multiprocessing.Process(target=interface_app)
+    interface_process.start()
+
