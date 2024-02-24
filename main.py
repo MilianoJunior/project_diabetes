@@ -58,6 +58,6 @@ if __name__ == '__main__':
     interface_process = multiprocessing.Process(target=interface_app)
     api_process.start()
     interface_process.start()
-
+    # felipe andrei
 
 
