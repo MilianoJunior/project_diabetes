@@ -34,52 +34,30 @@ Estrutura do projeto:
         - data/: Dados utilizados pelo projeto.
 
 '''
-
 # Importando as bibliotecas
-from libs import api, interface, login
 import dotenv
 import os
 import multiprocessing
 import time
+import subprocess
 
 # Carregando as variáveis de ambiente
 dotenv.load_dotenv()
 
-
-
-# Inicializando a aplicação
 def api_app():
-    # api.app.run(debug=True, port=8080, host='
     print('API Inicializada')
-    cont = 0
-    while True:
-        print(cont, 'API Rodando')
-        time.sleep(1)
-        cont += 1
-        if cont > 10:
-            break
-    return True
+    os.system('cd libs && python api.py')
 
 def interface_app():
-
     print('Interface Inicializada')
-    cont = 0
-    while True:
-        print(cont, 'Interface Rodando')
-        time.sleep(1)
-        cont += 1
-        if cont > 10:
-            break
-    return True
+    os.system('cd libs && streamlit run interface.py')
+
 
 if __name__ == '__main__':
-
-    # Ultilizar o multiprocessing para inicializar a API e a interface do usuário
-    # Inicializando a API
     api_process = multiprocessing.Process(target=api_app)
-    api_process.start()
-
-    # Inicializando a interface do usuário
     interface_process = multiprocessing.Process(target=interface_app)
+    api_process.start()
     interface_process.start()
+
+
 
