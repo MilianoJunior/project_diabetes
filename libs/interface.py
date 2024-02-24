@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 import pandas as pd
+import util
+
 import os
 def getAPI():
     url = 'http://localhost:8000'
@@ -29,6 +31,8 @@ def interface():
     st.write(response)
     st.write('Esta é a interface do usuário')
     st.write('Aqui você pode interagir com a aplicação')
+
+
 # def interface():
 #     df = pd.read_csv('../assets/diabetes.csv')
 #
@@ -50,5 +54,11 @@ def interface():
 #     st.write('Aqui você pode interagir com a aplicação')
 
 if __name__ == '__main__':
+    # verifica se a senha de acesso está correta
+    if not util.check_password():
+        # se a senha estiver errada, para o processamento do app
+        print("Usuario nao logado")
+        st.stop()
+
     interface()
 # interface()
