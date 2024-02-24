@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import os
+import json
 def getAPI():
     url = 'http://localhost:8000'
     response = requests.get(url)
@@ -9,45 +10,50 @@ def getAPI():
     return response.json()
 
 def interface():
-    df = pd.read_csv('../assets/diabetes.csv')
-    df = df.drop(df.columns[-1], axis=1)
 
-    print(df.head())
-    print(df.columns)
-    print(df.dtypes)
+    # colunas presentes no dataset
+    columns_names = ['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin','BMI', 'DiabetesPedigreeFunction', 'Age'],
+    tipos = ['int', 'int', 'int', 'int', 'int', 'float', 'float', 'int']
 
-    st.title('Interface do Usuário')
-    response = getAPI()
+    # titulo da aplicação
+    st.title('Modelo de Machine Learning para Diabetes')
+    st.write('Insira os dados do paciente para realizar a predição')
 
-    # create the fields for the user to fill in
+    column_names = ['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI',
+                    'DiabetesPedigreeFunction', 'Age']
+    tipos = ['int', 'int', 'int', 'int', 'int', 'float', 'float', 'int']
+
+    # create the interface to insert the data
     col1, col2, col3 = st.columns(3)
     columns = [col1, col2, col3]
-    for index, (column_name, column_type) in enumerate(zip(df.columns, df.dtypes)):
-        columns[index % 3].text_input(column_name + ' ('+ str(column_type).replace('64', '') + ')', value=0)
+    data = {}
+    for index, (column_name, tip) in enumerate(zip(column_names, tipos)):
+        data[column_name] = columns[index % 3].text_input(label=column_name, value=0, key=column_name + str(index))
     callback_enviar = st.button('Enviar')
 
-    st.write(response)
+    # se o botão de enviar for pressionado
+    if callback_enviar:
+        response = requests.post('http://localhost:8000/predict/', json=data)
+        if response.status_code == 200:
+            st.write(response.json())
+        else:
+            st.write(f"Request failed with status code {response.status_code}")
+    # if callback_enviar:
+    #     print(data)
+    #     data = json.dumps(data)
+    #
+    #     response = requests.post('http://localhost:8000/predict/', json=data)
+        # for index, (column_name, tip) in enumerate(zip(columns,tipos)):
+        #     data[column_name] = columns[index % 3].text_input(column_name + ' ('+ tip + ')', value=0)
+        # response = requests.post('http://localhost:8000/predict', json=data)
+        # data = {}
+        # for index, (column_name, column_type) in enumerate(zip(df.columns, df.dtypes)):
+        #     data[column_name] = columns[index % 3].text_input(column_name + ' ('+ str(column_type).replace('64', '') + ')', value=0)
+        # response = requests.post('http://localhost:8000/predict', json=data)
+
+        # st.write(response)
     st.write('Esta é a interface do usuário')
-    st.write('Aqui você pode interagir com a aplicação')
-# def interface():
-#     df = pd.read_csv('../assets/diabetes.csv')
-#
-#     print(df.head())
-#     print(df.columns)
-#     print(df.dtypes)
-#     # X = ['Gravidez', 'Glicose', 'Pressão Sanguínea', 'Espessura da Pele', 'Insulina', 'IMC', 'DiabetesPedigreeFunction',
-#     #         'Idade']
-#     # y = ['Outcome']
-#     st.title('Interface do Usuário')
-#     response = getAPI()
-#
-#     # criar os campos para o usuário preencher
-#     for i in zip(df.columns, df.dtypes):
-#         # st.write(i[0], i[1])
-#         st.text_input(i[0] + ' -> '+ str(i[1]).replace('64', ''), value=0)
-#     st.write(response)
-#     st.write('Esta é a interface do usuário')
-#     st.write('Aqui você pode interagir com a aplicação')
+
 
 if __name__ == '__main__':
     interface()
