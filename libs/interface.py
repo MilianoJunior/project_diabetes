@@ -2,11 +2,16 @@ import streamlit as st
 import requests
 import pandas as pd
 import util
+import dotenv
+
+dotenv.load_dotenv()
 
 import os
 import json
 def getAPI():
-    url = 'http://localhost:8000'
+    host = os.getenv('UVICORN_URL')
+    port = os.getenv('UVICORN_PORT')
+    url = f'http://{host}:{port}'
     response = requests.get(url)
     print(response.json())
     return response.json()
