@@ -50,7 +50,7 @@ def api_app():
 
 def interface_app():
     print('Interface Inicializada')
-    os.system('cd libs && streamlit run interface.py')
+    os.system('cd libs && streamlit run interface.py --server.address 0.0.0.0')
 
 
 if __name__ == '__main__':
