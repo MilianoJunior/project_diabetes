@@ -3,6 +3,10 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import pandas as pd
+import dotenv
+
+dotenv.load_dotenv()
+
 class Item(BaseModel):
     Pregnancies: str
     Glucose: str
@@ -38,5 +42,6 @@ def predict(item: Item):
     return {"Pregnancies": item.Pregnancies, "Glucose": item.Glucose, "BloodPressure": item.BloodPressure, "SkinThickness": item.SkinThickness, "Insulin": item.Insulin, "BMI": item.BMI, "DiabetesPedigreeFunction": item.DiabetesPedigreeFunction, "Age": item.Age}
 
 if __name__ == '__main__':
+    import os
     import uvicorn
-    uvicorn.run(app, host="localhost", port=8000)
+    uvicorn.run(app, host=os.getenv('UVICORN_URL'), port=int(os.getenv('UVICORN_PORT')))

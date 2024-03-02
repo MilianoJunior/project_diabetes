@@ -1,7 +1,7 @@
 '''
 Descrição: Modelo preditivo do dataset de diabetes
 Autor: Miliano F. de Oliveira Junior
-       Álvaro Pagliari
+       Álvaro Gianni Pagliari
 
 Disciplina: Implantação de Modelos de Machine Learning
 Professor: Dr. Felipe de Morais

@@ -1,12 +1,19 @@
 import streamlit as st
 import requests
 import pandas as pd
+import util
+import dotenv
+
+dotenv.load_dotenv()
+
 import os
 import json
 
 cont = 0
 def getAPI():
-    url = 'http://localhost:8000'
+    host = os.getenv('UVICORN_URL')
+    port = os.getenv('UVICORN_PORT')
+    url = f'http://{host}:{port}'
     response = requests.get(url)
     print(response.json())
     return response.json()
@@ -81,5 +88,11 @@ def interface():
 
 
 if __name__ == '__main__':
+    # verifica se a senha de acesso está correta
+    if not util.check_password():
+        # se a senha estiver errada, para o processamento do app
+        print("Usuario nao logado")
+        st.stop()
+
     interface()
 # interface()
